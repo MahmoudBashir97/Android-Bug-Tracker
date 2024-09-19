@@ -65,6 +65,7 @@ dependencies {
     implementation(libs.play.services.auth)
     implementation(libs.retrofit)
     implementation(libs.retrofit.gson)
+    implementation(libs.navigation)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

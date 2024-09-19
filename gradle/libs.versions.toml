@@ -12,6 +12,7 @@ lifecycle = "2.6.0"
 room = "2.5.0"
 play_services_auth = "20.4.0"
 retrofit = "2.9.0"
+navigation = "2.6.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -33,6 +34,7 @@ room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
 play-services-auth = { module = "com.google.android.gms:play-services-auth", version.ref = "play_services_auth" }
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
 retrofit-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "retrofit" }
+navigation = { module = "androidx.navigation:navigation-compose", version.ref = "navigation" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
