@@ -39,8 +39,12 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.mahmoud.bugtracker.data.remote.ApiService
+import com.mahmoud.bugtracker.data.remote.GoogleSheetsApi
+import com.mahmoud.bugtracker.data.remote.ImgurApi
 import com.mahmoud.bugtracker.data.repository.BugRepository
+import com.mahmoud.bugtracker.data.repository.UploadRepositoryImp
 import com.mahmoud.bugtracker.domain.usecase.UploadBugDataUseCase
+import com.mahmoud.bugtracker.domain.usecase.UploadImageUriUseCase
 import com.mahmoud.bugtracker.presentation.screens.MainScreen
 import com.mahmoud.bugtracker.presentation.screens.SubmitBugScreen
 import com.mahmoud.bugtracker.presentation.viewModels.BugViewModel
@@ -55,12 +59,13 @@ class MainActivity : ComponentActivity() {
     private lateinit var viewModel: BugViewModel
 
     private fun initializeViewModel() {
-        val api = ApiService.create() // Initialize Retrofit service
-        val repository = BugRepository(api)
-        val uploadUseCase = UploadBugDataUseCase(repository)
+        val googleSheetRepo = BugRepository(ApiService.createBug())
+        val imageUrl = UploadRepositoryImp(ApiService.createImageUrl(), contentResolver)
+        val uploadBugUseCase = UploadBugDataUseCase(googleSheetRepo)
+        val uploadImageUriUseCase = UploadImageUriUseCase(imageUrl)
         viewModel = ViewModelProvider(
             this,
-            BugViewModelFactory(uploadUseCase)
+            BugViewModelFactory(uploadBugUseCase, uploadImageUriUseCase)
         )[BugViewModel::class.java]
     }
 
@@ -89,7 +94,6 @@ class MainActivity : ComponentActivity() {
                     onSelectingImage = {
                         selectImage()
                     },
-                    imageUri = Uri.parse(viewModel.imageUri.value ?: ""),
                     onSubmit = { description ->
                         if (viewModel.imageUri.value != null) {
                             viewModel.uploadBugData(

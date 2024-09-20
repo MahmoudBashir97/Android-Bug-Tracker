@@ -21,7 +21,15 @@ android {
     }
 
     buildTypes {
+
+        debug {
+            buildConfigField("String", "BASE_URL_GOOGLE_SHEET", "\"https://script.google.com/debug/\"")
+            buildConfigField("String", "BASE_URL_IMAGE_URL", "\"https://api.imgur.com/debug\"")
+        }
         release {
+            buildConfigField("String", "BASE_URL_GOOGLE_SHEET", "\"https://script.google.com/release/\"")
+            buildConfigField("String", "BASE_URL_IMAGE_URL", "\"https://api.imgur.com/release\"")
+
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
@@ -37,6 +45,7 @@ android {
         jvmTarget = "1.8"
     }
     buildFeatures {
+        buildConfig = true
         compose = true
     }
     composeOptions {
