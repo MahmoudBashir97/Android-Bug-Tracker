@@ -11,6 +11,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import com.mahmoud.bugtracker.ScreensRoute
 
 @Composable
 fun MainScreen(navController: NavHostController) {
@@ -21,7 +22,7 @@ fun MainScreen(navController: NavHostController) {
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Button(onClick = { navController.navigate("submit") }) {
+        Button(onClick = { navController.navigate(ScreensRoute.SUBMIT.name) }) {
             Text("Report a Bug")
         }
     }

@@ -10,23 +10,34 @@ import retrofit2.Response
 
 class BugViewModel(private val uploadBugDataUseCase: UploadBugDataUseCase) : ViewModel() {
 
-    var imageUri = mutableStateOf<String?>(null) // MutableState for imageUri
-    var isLoading = mutableStateOf(false) // MutableState for loading status
+    var imageUri = mutableStateOf<String?>(null)
+    var isLoading = mutableStateOf(false)
+    var description = mutableStateOf("")
 
     fun setImageUri(uri: String?) {
-        imageUri.value = uri // Update the imageUri
+        imageUri.value = uri
+    }
+
+    fun setDescription(newDescription: String) {
+        description.value = newDescription
     }
 
     fun uploadBugData(description: String, imageUrl: String) {
         viewModelScope.launch {
-            isLoading.value = true // Set loading to true
+            isLoading.value = true
             val response: Response<Void> = uploadBugDataUseCase(description, imageUrl)
             if (response.isSuccessful) {
                 Log.d("detectingRequest", " success")
+                resetDataOnView()
             } else {
                 Log.d("detectingRequest", " failed")
             }
             isLoading.value = false // Set loading to false after request
         }
+    }
+
+    private fun resetDataOnView() {
+        setImageUri("")
+        setDescription("")
     }
 }

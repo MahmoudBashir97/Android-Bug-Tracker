@@ -82,9 +82,9 @@ class MainActivity : ComponentActivity() {
 
     @Composable
     fun MainScreenContent(navController: NavHostController){
-        NavHost(navController = navController, startDestination = "main") {
-            composable("main") { MainScreen(navController) }
-            composable("submit") {
+        NavHost(navController = navController, startDestination = ScreensRoute.MAIN.name) {
+            composable(ScreensRoute.MAIN.name) { MainScreen(navController) }
+            composable(ScreensRoute.SUBMIT.name) {
                 SubmitBugScreen(
                     viewModel,
                     onSelectingImage = {
@@ -122,4 +122,9 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
+}
+
+enum class ScreensRoute{
+    MAIN,
+    SUBMIT
 }
