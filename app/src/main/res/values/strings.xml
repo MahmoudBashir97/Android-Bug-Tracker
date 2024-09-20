@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">Bug tracker</string>
+    <string name="description">Description</string>
+    <string name="selected_img">Selected Image</string>
+    <string name="no_img_selected">No Image Selected</string>
+    <string name="select_screenShot">Select Screenshot</string>
+    <string name="submit_bug">Submit Bug</string>
 </resources>
