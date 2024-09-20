@@ -3,6 +3,7 @@ package com.mahmoud.bugtracker
 import android.app.Activity
 import android.content.Intent
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -52,12 +53,6 @@ class MainActivity : ComponentActivity() {
     }
 
     private lateinit var viewModel: BugViewModel
-    private var imageUri by mutableStateOf<Uri?>(null)
-
-    override fun onStart() {
-        initializeViewModel()
-        super.onStart()
-    }
 
     private fun initializeViewModel() {
         val api = ApiService.create() // Initialize Retrofit service
@@ -71,17 +66,21 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        initializeViewModel()
         enableEdgeToEdge()
         setContent {
             val navController = rememberNavController()
             BugTrackerTheme {
                 MainScreenContent(navController)
             }
+            handleIncomingIntent {
+                navController.navigate(ScreensRoute.SUBMIT.name)
+            }
         }
     }
 
     @Composable
-    fun MainScreenContent(navController: NavHostController){
+    fun MainScreenContent(navController: NavHostController) {
         NavHost(navController = navController, startDestination = ScreensRoute.MAIN.name) {
             composable(ScreensRoute.MAIN.name) { MainScreen(navController) }
             composable(ScreensRoute.SUBMIT.name) {
@@ -122,9 +121,23 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
+
+    private fun handleIncomingIntent(onUriReceived: (() -> Unit)? = null) {
+        if (intent?.action == Intent.ACTION_SEND && intent.type?.startsWith("image/") == true) {
+            val receivedUri: Uri? = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                intent.getParcelableExtra(Intent.EXTRA_STREAM, Uri::class.java)
+            } else {
+                intent.getParcelableExtra<Uri>(Intent.EXTRA_STREAM)
+            }
+            receivedUri?.let {
+                viewModel.setImageUri(it.toString())
+                onUriReceived?.invoke()
+            }
+        }
+    }
 }
 
-enum class ScreensRoute{
+enum class ScreensRoute {
     MAIN,
     SUBMIT
 }
