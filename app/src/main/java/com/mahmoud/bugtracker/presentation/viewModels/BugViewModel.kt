@@ -75,7 +75,7 @@ class BugViewModel(
 
 
     private fun resetDataOnView() {
-        setImageUri("")
+        setImageUri(null)
         setDescription("")
     }
 }
