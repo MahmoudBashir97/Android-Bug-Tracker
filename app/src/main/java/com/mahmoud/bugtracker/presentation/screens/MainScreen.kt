@@ -11,7 +11,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import com.mahmoud.bugtracker.ScreensRoute
+import com.mahmoud.bugtracker.utils.ScreensRoute
 
 @Composable
 fun MainScreen(navController: NavHostController) {

@@ -23,12 +23,14 @@ android {
     buildTypes {
 
         debug {
-            buildConfigField("String", "BASE_URL_GOOGLE_SHEET", "\"https://script.google.com/debug/\"")
-            buildConfigField("String", "BASE_URL_IMAGE_URL", "\"https://api.imgur.com/debug\"")
+            buildConfigField("String", "BASE_URL_GOOGLE_SHEET", "\"https://script.google.com/\"")
+            buildConfigField("String", "BASE_URL_IMAGE_URL", "\"https://api.imgur.com/\"")
+            buildConfigField("String", "CLIENT_ID", "\"a234807f9a4ba28\"")
         }
         release {
-            buildConfigField("String", "BASE_URL_GOOGLE_SHEET", "\"https://script.google.com/release/\"")
-            buildConfigField("String", "BASE_URL_IMAGE_URL", "\"https://api.imgur.com/release\"")
+            buildConfigField("String", "BASE_URL_GOOGLE_SHEET", "\"https://script.google.com/\"")
+            buildConfigField("String", "BASE_URL_IMAGE_URL", "\"https://api.imgur.com/\"")
+            buildConfigField("String", "CLIENT_ID", "\"a234807f9a4ba28\"")
 
             isMinifyEnabled = false
             proguardFiles(

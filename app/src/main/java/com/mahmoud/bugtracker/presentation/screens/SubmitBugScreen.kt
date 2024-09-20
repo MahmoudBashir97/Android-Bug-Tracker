@@ -12,7 +12,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
@@ -24,8 +24,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
+import com.mahmoud.bugtracker.R
 import com.mahmoud.bugtracker.presentation.viewModels.BugViewModel
 
 @Composable
@@ -39,12 +41,12 @@ fun SubmitBugScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(top = 50.dp)
+            .padding(top = 50.dp, start = 10.dp, end = 10.dp)
     ) {
         TextField(
             value = viewModel.description.value,
             onValueChange = { viewModel.setDescription(it) },
-            label = { Text("Description") },
+            label = { Text(stringResource(id = R.string.description)) },
             modifier = Modifier
                 .fillMaxWidth()
                 .height(90.dp)
@@ -66,13 +68,15 @@ fun SubmitBugScreen(
         ) {
             if (viewModel.imageUri.value != null) {
                 Image(
-                    modifier = Modifier.size(80.dp),
+                    modifier = Modifier
+                        .width(120.dp)
+                        .height(200.dp),
                     painter = rememberAsyncImagePainter(model = viewModel.imageUri.value),
-                    contentDescription = "Selected Image"
+                    contentDescription = stringResource(id = R.string.selected_img)
                 )
             } else {
                 Text(
-                    text = "No Image Selected",
+                    text = stringResource(id = R.string.no_img_selected),
                     color = Color.Gray,
                     style = MaterialTheme.typography.bodyMedium
                 )
@@ -88,7 +92,7 @@ fun SubmitBugScreen(
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Button(onClick = { onSelectingImage?.invoke() }) {
-                Text("Select Screenshot")
+                Text(stringResource(id = R.string.select_screenShot))
             }
 
             if (isLoading) {
@@ -96,8 +100,11 @@ fun SubmitBugScreen(
                 Spacer(modifier = Modifier.height(16.dp))
             }
 
-            Button(onClick = { onSubmit?.invoke(viewModel.description.value) }, enabled = !isLoading) {
-                Text("Submit Bug")
+            Button(
+                onClick = { onSubmit?.invoke(viewModel.description.value) },
+                enabled = !isLoading
+            ) {
+                Text(stringResource(id = R.string.submit_bug))
             }
         }
     }

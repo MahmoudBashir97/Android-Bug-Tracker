@@ -1,13 +1,14 @@
 package com.mahmoud.bugtracker.data.remote
 
+import com.mahmoud.bugtracker.BuildConfig
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 object ApiService {
-    private const val BASE_URL_GOOGLE_SHEET = "https://script.google.com/"
-    private const val BASE_URL_IMAGE_URL = "https://api.imgur.com"
+    private const val BASE_URL_GOOGLE_SHEET = BuildConfig.BASE_URL_GOOGLE_SHEET
+    private const val BASE_URL_IMAGE_URL = BuildConfig.BASE_URL_IMAGE_URL
 
     private val loggingInterceptor = HttpLoggingInterceptor().apply {
         level = HttpLoggingInterceptor.Level.BODY
