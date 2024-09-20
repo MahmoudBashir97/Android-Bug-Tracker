@@ -68,6 +68,7 @@ dependencies {
     implementation(libs.navigation)
     implementation(libs.okhttp)
     implementation(libs.logging.interceptor)
+    implementation(libs.coil.compose)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

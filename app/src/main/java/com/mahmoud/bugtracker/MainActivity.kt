@@ -40,6 +40,8 @@ import androidx.navigation.compose.rememberNavController
 import com.mahmoud.bugtracker.data.remote.ApiService
 import com.mahmoud.bugtracker.data.repository.BugRepository
 import com.mahmoud.bugtracker.domain.usecase.UploadBugDataUseCase
+import com.mahmoud.bugtracker.presentation.screens.MainScreen
+import com.mahmoud.bugtracker.presentation.screens.SubmitBugScreen
 import com.mahmoud.bugtracker.presentation.viewModels.BugViewModel
 import com.mahmoud.bugtracker.presentation.viewModels.BugViewModelFactory
 import com.mahmoud.bugtracker.ui.theme.BugTrackerTheme
@@ -73,91 +75,31 @@ class MainActivity : ComponentActivity() {
         setContent {
             val navController = rememberNavController()
             BugTrackerTheme {
-                NavHost(navController = navController, startDestination = "main") {
-                    composable("main") { MainScreen(navController) }
-                    composable("submit") {
-                        SubmitBugScreen(
-                            onImageSelected = { uri -> imageUri = uri },
-                            imageUri = Uri.parse(viewModel.imageUri.value ?: ""),
-                            onSubmit = { description ->
-                                if (viewModel.imageUri.value != null) {
-                                    viewModel.uploadBugData(
-                                        description,
-                                        viewModel.imageUri.value.toString()
-                                    )
-                                }
-                            }
-                        )
+                MainScreenContent(navController)
+            }
+        }
+    }
+
+    @Composable
+    fun MainScreenContent(navController: NavHostController){
+        NavHost(navController = navController, startDestination = "main") {
+            composable("main") { MainScreen(navController) }
+            composable("submit") {
+                SubmitBugScreen(
+                    viewModel,
+                    onSelectingImage = {
+                        selectImage()
+                    },
+                    imageUri = Uri.parse(viewModel.imageUri.value ?: ""),
+                    onSubmit = { description ->
+                        if (viewModel.imageUri.value != null) {
+                            viewModel.uploadBugData(
+                                description,
+                                viewModel.imageUri.value.toString()
+                            )
+                        }
                     }
-                }
-            }
-        }
-    }
-
-    @Composable
-    fun MainScreen(navController: NavHostController) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(16.dp),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Button(onClick = { navController.navigate("submit") }) {
-                Text("Report a Bug")
-            }
-        }
-    }
-
-    @Composable
-    fun SubmitBugScreen(
-        onImageSelected: (Uri) -> Unit,
-        imageUri: Uri?,
-        onSubmit: (String) -> Unit
-    ) {
-        var description by remember { mutableStateOf("") }
-        val isLoading by viewModel.isLoading
-
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(top = 50.dp)
-        ) {
-            TextField(
-                value = description,
-                onValueChange = { description = it },
-                label = { Text("Description") },
-                modifier = Modifier
-                    .fillMaxWidth()        // Fills the width of the screen
-                    .height(90.dp)         // Sets the height greater than 50dp (for example, 56dp)
-            )
-            Spacer(modifier = Modifier.height(16.dp))
-            viewModel.imageUri.value?.let {
-                Image(
-                    painter = painterResource(id = R.drawable.ic_launcher_foreground),
-                    contentDescription = "Selected Image"
                 )
-            }
-            Spacer(modifier = Modifier.height(16.dp))
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()          // Fills the width of the screen
-                    .padding(vertical = 16.dp), // Optional padding
-                horizontalArrangement = Arrangement.SpaceBetween // Space between the buttons
-            ) {
-                Button(onClick = { selectImage() }) {
-                    Text("Select Screenshot")
-                }
-
-                // Show loader when the upload is in progress
-                if (isLoading) {
-                    CircularProgressIndicator()
-                    Spacer(modifier = Modifier.height(16.dp))
-                }
-
-                Button(onClick = { onSubmit(description) }, enabled = !isLoading) {
-                    Text("Submit Bug")
-                }
             }
         }
     }
