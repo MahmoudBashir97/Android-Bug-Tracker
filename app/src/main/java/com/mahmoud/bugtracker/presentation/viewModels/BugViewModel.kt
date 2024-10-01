@@ -3,6 +3,7 @@ package com.mahmoud.bugtracker.presentation.viewModels
 import android.net.Uri
 import android.util.Log
 import androidx.compose.runtime.mutableStateOf
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mahmoud.bugtracker.domain.usecase.UploadBugDataUseCase
@@ -20,6 +21,8 @@ class BugViewModel(
     var isLoading = mutableStateOf(false)
     var description = mutableStateOf("")
 
+    var uploaderResult = mutableStateOf(false)
+
     fun setImageUri(uri: String?) {
         imageUri.value = uri
     }
@@ -36,7 +39,9 @@ class BugViewModel(
                 val uploadedUrl = uploadImageUrl(Uri.parse(imageUrl)).await()
 
                 if (!uploadedUrl.isNullOrEmpty()) {
-                    val response: Response<Void> = uploadBugDataUseCase(description, uploadedUrl.toString())
+                    val response: Response<Void> =
+                        uploadBugDataUseCase(description, uploadedUrl.toString())
+                    uploaderResult.value = response.isSuccessful
                     if (response.isSuccessful) {
                         Log.d("detectingRequest", " success")
                         resetDataOnView()
